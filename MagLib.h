@@ -1,7 +1,6 @@
 #ifndef MAGLIB_H
 #define MAGLIB_H
 
-#include <cstdint>
 #include <SD.h>
 #include <SPI.h>
 #include "MLX90393.h"
@@ -13,6 +12,15 @@
 #define NODE_16       	98	// 2 + 6*16
 #define NODE_32       	194	// 2 + 6*32
 #define NODE_64       	386	// 2 + 6*64
+
+#define SDA0			18
+#define SCL0			19
+#define SDA1			38
+#define SCL1			37
+#define SDA2			4
+#define SCL2			3
+#define SDA3			56
+#define SCL3			57
 
 /**	@file MagLib.h
 	@brief Class for integration with arrays of MagOne sensors on the Arduino platform.
@@ -106,6 +114,12 @@ public:
 	/**	Close SD Card and stop writing to file.
 	 */
 	void closeSDCard();
+
+	/**	Change the I2C bus used.
+		@param pinSDA Specify the pin on the Arduino for I2C SDA line.
+		@param pinSDA Specify the pin on the Arduino for I2C SCL line.
+	*/
+	void changeI2CBus(int pinSDA, int pinSCL);
 
 private:
 
