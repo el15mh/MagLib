@@ -119,7 +119,7 @@ public:
 		@param pinSDA Specify the pin on the Arduino for I2C SDA line.
 		@param pinSDA Specify the pin on the Arduino for I2C SCL line.
 	*/
-	void changeI2CBus(int pinSDA, int pinSCL);
+	void changeI2CBus(int bus);
 
 private:
 

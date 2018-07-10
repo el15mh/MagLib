@@ -192,8 +192,27 @@ void MagLib::setMux(int *muxBus, int index)
 	}
 }
 
-void MagLib::changeI2CBus(int pinSDA, int pinSCL)
+void MagLib::changeI2CBus(int bus)
 {
-	Wire.setSDA(pinSDA);
-	Wire.setSCL(pinSCL);
+	switch (bus)
+	{
+	case 0:
+		Wire.setSDA(SDA0);
+		Wire.setSCL(SCL0);
+		break;
+	case 1:
+		Wire.setSDA(SDA1);
+		Wire.setSCL(SCL1);
+		break;
+	case 2:
+		Wire.setSDA(SDA2);
+		Wire.setSCL(SCL2);
+		break;
+	case 3:
+		Wire.setSDA(SDA3);
+		Wire.setSCL(SCL3);
+		break;
+	default:
+		break;
+	}
 }
