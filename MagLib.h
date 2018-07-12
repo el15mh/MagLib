@@ -121,6 +121,10 @@ public:
 	*/
 	void changeI2CBus(int bus);
 
+	/** Print time taken to get 1000 readings - 4 Node
+	*/
+	void TimeMeasurement(float TimeTaken);
+
 private:
 
 	/**	Set digital output pins on Arduino connected to Multiplexer SELECT pins

@@ -216,3 +216,8 @@ void MagLib::changeI2CBus(int bus)
 		break;
 	}
 }
+
+void MagLib::TimeMeasurement(float TimeTaken)
+{
+	Serial.println(TimeTaken, DEC);
+}
