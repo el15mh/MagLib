@@ -1,6 +1,7 @@
 #ifndef MAGLIB_H
 #define MAGLIB_H
 
+#include <cstdint>
 #include <SD.h>
 #include <SPI.h>
 #include "MLX90393.h"
@@ -64,7 +65,7 @@ public:
 	void initFourNode(uint32_t addressPackage, char *receiveBuffer, char zyxt);
 
 	/** Read data current measured by the device.
-		@param receiveBuffer Pointer to data packet (9 bytes -> Status + 2*(T+X+Y+Z)).
+		@param buffer Pointer to data packet.
 		@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
 	*/
 	void readFourNodes(char *buffer, char zyxt);
@@ -79,10 +80,25 @@ public:
 	void init16Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux);
 
 	/** Read data current measured by the device.
-		@param receiveBuffer Pointer to data packet (9 bytes -> Status + 2*(T+X+Y+Z)).
+		@param buffer Pointer to data packet.
 		@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
 	*/
 	void read16Nodes(char *buffer, char zyxt);
+
+/* ********** 32 NODE SENSOR CONTROL ********** */
+
+	/*	Initialise 32 node sensor array
+	@param addressPackage I2C Addresses for sensors; 4x 8bit package
+	@param receiveBuffer Buffer to hold status byte
+	@param zytx Selection byte to specify axes to read (0xE -> XYZ)
+	*/
+	void init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux);
+
+	/** Read data current measured by 32 nodes.
+	@param buffer Pointer to data packet.
+	@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
+	*/
+	void read32Nodes(char *buffer, char zyxt);
 	
 
 /* ********** GLOBAL FUNCTIONS ********** */
@@ -129,9 +145,8 @@ private:
 
 	/**	Set digital output pins on Arduino connected to Multiplexer SELECT pins
 		@param muxBus Array of HIGH/LOW values for SELECT pins
-		@param index specify which multiplexer is to be accessed.
 	 */
-	void setMux(int *muxBus, int index);
+	void setMux(int S1, int S0);
 
 	char receiveBuffer[9];	/** Buffer to receive raw data from each MLX device. */
 
@@ -147,9 +162,7 @@ private:
 	uint8_t _Address3;	/** Third I2C address used for communcations */
 	uint8_t _Address4;	/** Fourth I2C address used for communcations */
 
-	int _mux1[2];		/** Pins specifying single multiplexer bus [S1 S0] */
-	int _mux2[1][2];	/** Pins specifying dual multiplexer bus [M0][S1 S0] */
-	int _mux3[2][2];	/** Pins specifying quad multiplexer bus [M0 M1][S1 S0] */
+	int _mux[2];		/** Pins specifying single multiplexer bus [S1 S0] */
 
 	bool SDCard;		/** Variable to ensure SD card is operating normally. */
 
