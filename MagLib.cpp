@@ -76,7 +76,7 @@ void MagLib::readFourNodes(char *buffer, char zyxt)
 	_device4.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i + 18] = receiveBuffer[i + 1];
 }
-void MagLib::init16Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux)
+void MagLib::init16Nodes(uint32_t addressPackage, char *buffer, char zyxt, int *mux)
 {
 	changeI2CBus(0);
 
