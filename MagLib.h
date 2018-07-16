@@ -14,14 +14,26 @@
 #define NODE_32       	194	// 2 + 6*32
 #define NODE_64       	386	// 2 + 6*64
 
-#define SDA0			18
-#define SCL0			19
-#define SDA1			38
-#define SCL1			37
-#define SDA2			4
-#define SCL2			3
-#define SDA3			56
-#define SCL3			57
+#ifdef __AVR_ATmega328__	// ARDUINO UNO
+	#define SDA0		20
+	#define SCL0		21
+#endif
+
+#ifdef __SAM3X8E__			// ARDUINO DUE
+	#define SDA0		20
+	#define SCL0		21
+#endif
+
+#ifdef CORE_TEENSY			// TEENSY BOARDS
+	#define SDA0			18
+	#define SCL0			19
+	#define SDA1			38
+	#define SCL1			37
+	#define SDA2			4
+	#define SCL2			3
+	#define SDA3			56
+	#define SCL3			57
+#endif
 
 /**	@file MagLib.h
 	@brief Class for integration with arrays of MagOne sensors on the Arduino platform.
