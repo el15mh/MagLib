@@ -2,6 +2,12 @@
 
 MagLib::MagLib()
 {
+	Serial.begin(9600);
+	Wire.begin();
+
+#ifdef CORE_TEENSY
+	Serial.println("Using teensy");
+#endif // CORE_TEENSY
 
 }
 

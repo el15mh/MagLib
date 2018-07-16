@@ -16,10 +16,15 @@ char buffer[NODE_SINGLE];
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
-  Wire.begin();
+  //Serial.begin(9600);
+  //Wire.begin();
+
+//  Wire.setSDA(SDA0);
+//  Wire.setSCL(SCL0);
 
   device.initSingleNode(I2C_Address, buffer, 0xF);
+
+  delay(3000);
 }
 
 void loop() {
@@ -27,5 +32,5 @@ void loop() {
   device.readSingleNode(buffer, 0xF);
   device.printRawData(buffer, HEX, NODE_SINGLE);
 
-  delay(20);
+  delay(1000);
 }
