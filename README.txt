@@ -11,6 +11,11 @@ Version 1.0
 	- print raw data to serial port in binary or hex at 50 Hz
 	- print data to SD card at 50 Hz
 
+Version 1.1
+
+
+	- read 4x4 and 32 array devices
+
 
 Tested using Teensy 3.6.
 

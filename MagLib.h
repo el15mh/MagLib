@@ -1,7 +1,7 @@
 #ifndef MAGLIB_H
 #define MAGLIB_H
 
-#include <cstdint>
+//#include <cstdint>
 #include <SD.h>
 #include <SPI.h>
 #include "MLX90393.h"

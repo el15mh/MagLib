@@ -39,6 +39,9 @@ void MagLib::readSingleNode(char *buffer, char zyxt)
 
 void MagLib::initFourNode(uint32_t addressPackage, char *_receiveBuffer, char zyxt)
 {
+	Serial.begin(9600);
+	Wire.begin();
+
 	changeI2CBus(0);
 
 	_Address1 = addressPackage & 0xFF;
@@ -84,15 +87,16 @@ void MagLib::readFourNodes(char *buffer, char zyxt)
 }
 void MagLib::init16Nodes(uint32_t addressPackage, char *buffer, char zyxt, int *mux)
 {
+	Serial.begin(9600);
+	Wire.begin();
+
 	changeI2CBus(0);
 
-	// Retrieve address from package
-	_Address1 = addressPackage & 0xFF;
-	_Address2 = (addressPackage & 0xFF00) >> 8;
-	_Address3 = (addressPackage & 0xFF0000) >> 16;
-	_Address4 = (addressPackage & 0xFF000000) >> 24;
+	char _buffer[1024];
+	char* format = "Init 16 nodes on MUX pins: %i %i\n";
 
-	Serial.printf("Init 16 nodes on MUX pins: %i %i\n", mux[1], mux[0]);
+	sprintf(_buffer, format, mux[0], mux[1]);
+	Serial.print(buffer);
 
 	// Set MUX lines on Arduino board
 	pinMode(mux[0], OUTPUT);
@@ -121,6 +125,7 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 	buffer[1] = (time & 0xFF);					// T lsb
 
 	setMux(LOW, LOW);
+
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i] = receiveBuffer[i + 1];
 
@@ -134,6 +139,7 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 	for (int i = 2; i < 9; i++) buffer[i + 18] = receiveBuffer[i + 1];
 
 	setMux(LOW, HIGH);
+
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i + 24] = receiveBuffer[i + 1];
 
@@ -147,6 +153,7 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 	for (int i = 2; i < 9; i++) buffer[i + 42] = receiveBuffer[i + 1];
 
 	setMux(HIGH, LOW);
+
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i + 48] = receiveBuffer[i + 1];
 
@@ -160,6 +167,7 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 	for (int i = 2; i < 9; i++) buffer[i + 66] = receiveBuffer[i + 1];
 
 	setMux(HIGH, HIGH);
+
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i + 72] = receiveBuffer[i + 1];
 
@@ -175,6 +183,8 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 
 void MagLib::init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux)
 {
+	changeI2CBus(0);
+
 	// Init 16 nodes as normal
 	init16Nodes(addressPackage, receiveBuffer, zyxt, mux);
 
@@ -315,7 +325,7 @@ void MagLib::printRawData(char *buffer, int format, int size)
 		case HEX:
 			for (int i = 0; i < size; i++) {
 				Serial.print(buffer[i], HEX);
-				//Serial.print(" ");
+				Serial.print(" ");
 			}	// for loop
 			Serial.print("\n");
 			break;
@@ -390,6 +400,16 @@ void MagLib::closeSDCard()
 
 void MagLib::setMux(int S1, int S0)
 {
+	/*
+	Serial.print("Changing mux: S0 = ");
+	Serial.print(S0);
+	Serial.print(", S1 = ");
+	Serial.print(S1);
+	Serial.println();
+	*/
+
+	delay(10);
+
 	digitalWrite(_mux[0], S0);
 	digitalWrite(_mux[1], S1);
 }
