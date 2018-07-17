@@ -325,7 +325,7 @@ void MagLib::printRawData(char *buffer, int format, int size)
 		case HEX:
 			for (int i = 0; i < size; i++) {
 				Serial.print(buffer[i], HEX);
-				Serial.print(" ");
+				//Serial.print(" ");
 			}	// for loop
 			Serial.print("\n");
 			break;
