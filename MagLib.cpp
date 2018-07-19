@@ -2,7 +2,7 @@
 
 MagLib::MagLib()
 {
-	
+
 }
 
 MagLib::~MagLib()
@@ -28,6 +28,7 @@ void MagLib::readSingleNode(char *buffer, char zyxt)
 	buffer[1] = (time & 0xFF);			// T lsb
 
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
+
 	buffer[2] = receiveBuffer[3];
 	buffer[3] = receiveBuffer[4];
 	buffer[4] = receiveBuffer[5];
@@ -39,7 +40,7 @@ void MagLib::readSingleNode(char *buffer, char zyxt)
 
 void MagLib::initFourNode(uint32_t addressPackage, char *_receiveBuffer, char zyxt)
 {
-	changeI2CBus(0);
+	//changeI2CBus(0);
 
 	_address1 = addressPackage & 0xFF;
 	_address2 = (addressPackage & 0xFF00) >> 8;
@@ -84,13 +85,8 @@ void MagLib::readFourNodes(char *buffer, char zyxt)
 }
 void MagLib::init16Nodes(uint32_t addressPackage, char *buffer, char zyxt, int *mux)
 {
-	changeI2CBus(0);
-
-	char _buffer[1024];
-	char* format = "Init 16 nodes on MUX pins: %i %i\n";
-
-	sprintf(_buffer, format, mux[0], mux[1]);
-	Serial.print(buffer);
+	//changeI2CBus(0);
+	Serial.println("*** Init 16 nodes...");
 
 	// Set MUX lines on Arduino board
 	pinMode(mux[0], OUTPUT);
@@ -195,7 +191,7 @@ void MagLib::read32Nodes(char *buffer, char zyxt)
 
 	buffer[0] = (time & 0xFF00) >> 8;			// T msb
 	buffer[1] = (time & 0xFF);					// T lsb
-	
+
 	changeI2CBus(0);
 
 	setMux(LOW, LOW);
@@ -322,7 +318,7 @@ int MagLib::testI2CLines(uint32_t addressPackage)
 	Wire.endTransmission();
 	Wire.requestFrom(_address1, 1);
 	if (Wire.available() != 1) error |= (0b0001);
-	
+
 	changeI2CBus(1);
 
 	Wire.beginTransmission(_address2);
@@ -405,7 +401,7 @@ void MagLib::initSDCard(int chipSelect)
 	int count = 0;
 
 	sprintf(fileTitle, format, count);
-	
+
 	while (1) {
 		if (SD.exists(fileTitle)) {
 			count++;
@@ -430,7 +426,7 @@ void MagLib::printToSDCard(char *buffer, int size)
 		file.printf("%x\t", buffer[i]);
 	}
 	file.printf("\n");
-	
+
 }	// printToSDCard()
 
 void MagLib::closeSDCard()
