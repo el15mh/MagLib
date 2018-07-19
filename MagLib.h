@@ -88,20 +88,24 @@ public:
 /* ********** 32 NODE SENSOR CONTROL ********** */
 
 	/*	Initialise 32 node sensor array
-	@param addressPackage I2C Addresses for sensors; 4x 8bit package
-	@param receiveBuffer Buffer to hold status byte
-	@param zytx Selection byte to specify axes to read (0xE -> XYZ)
+		@param addressPackage I2C Addresses for sensors; 4x 8bit package
+		@param receiveBuffer Buffer to hold status byte
+		@param zytx Selection byte to specify axes to read (0xE -> XYZ)
 	*/
 	void init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux);
 
 	/** Read data current measured by 32 nodes.
-	@param buffer Pointer to data packet.
-	@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
+		@param buffer Pointer to data packet.
+		@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
 	*/
 	void read32Nodes(char *buffer, char zyxt);
 	
-
 /* ********** GLOBAL FUNCTIONS ********** */
+
+	/** Print raw data to serial port.
+		@param addressPackage I2C Addresses for sensors
+	*/
+	int testI2CLines(uint32_t addressPackage);
 
 	/** Print raw data to serial port.
 		@param buffer Packet of data containing info from sensors
@@ -157,10 +161,10 @@ private:
 	MLX90393 _device3;	/** MLX90393 device to take readings */
 	MLX90393 _device4;	/** MLX90393 device to take readings */
 
-	uint8_t _Address1;	/** First I2C address used for communcations */
-	uint8_t _Address2;	/** Second I2C address used for communcations */
-	uint8_t _Address3;	/** Third I2C address used for communcations */
-	uint8_t _Address4;	/** Fourth I2C address used for communcations */
+	uint8_t _address1;	/** First I2C address used for communcations */
+	uint8_t _address2;	/** Second I2C address used for communcations */
+	uint8_t _address3;	/** Third I2C address used for communcations */
+	uint8_t _address4;	/** Fourth I2C address used for communcations */
 
 	int _mux[2];		/** Pins specifying single multiplexer bus [S1 S0] */
 

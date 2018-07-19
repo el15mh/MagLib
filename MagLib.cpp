@@ -2,13 +2,7 @@
 
 MagLib::MagLib()
 {
-	Serial.begin(9600);
-	Wire.begin();
-
-#ifdef CORE_TEENSY
-	Serial.println("Using teensy");
-#endif // CORE_TEENSY
-
+	
 }
 
 MagLib::~MagLib()
@@ -45,29 +39,26 @@ void MagLib::readSingleNode(char *buffer, char zyxt)
 
 void MagLib::initFourNode(uint32_t addressPackage, char *_receiveBuffer, char zyxt)
 {
-	Serial.begin(9600);
-	Wire.begin();
-
 	changeI2CBus(0);
 
-	_Address1 = addressPackage & 0xFF;
-	_Address2 = (addressPackage & 0xFF00) >> 8;
-	_Address3 = (addressPackage & 0xFF0000) >> 16;
-	_Address4 = (addressPackage & 0xFF000000) >> 24;
+	_address1 = addressPackage & 0xFF;
+	_address2 = (addressPackage & 0xFF00) >> 8;
+	_address3 = (addressPackage & 0xFF0000) >> 16;
+	_address4 = (addressPackage & 0xFF000000) >> 24;
 
-	_device1.init(receiveBuffer, _Address1);
+	_device1.init(receiveBuffer, _address1);
 	_device1.configure(receiveBuffer);
 	_device1.startBurstMode(receiveBuffer, zyxt);
 
-	_device2.init(receiveBuffer, _Address2);
+	_device2.init(receiveBuffer, _address2);
 	_device2.configure(receiveBuffer);
 	_device2.startBurstMode(receiveBuffer, zyxt);
 
-	_device3.init(receiveBuffer, _Address3);
+	_device3.init(receiveBuffer, _address3);
 	_device3.configure(receiveBuffer);
 	_device3.startBurstMode(receiveBuffer, zyxt);
 
-	_device4.init(receiveBuffer, _Address4);
+	_device4.init(receiveBuffer, _address4);
 	_device4.configure(receiveBuffer);
 	_device4.startBurstMode(receiveBuffer, zyxt);
 }
@@ -93,9 +84,6 @@ void MagLib::readFourNodes(char *buffer, char zyxt)
 }
 void MagLib::init16Nodes(uint32_t addressPackage, char *buffer, char zyxt, int *mux)
 {
-	Serial.begin(9600);
-	Wire.begin();
-
 	changeI2CBus(0);
 
 	char _buffer[1024];
@@ -189,9 +177,6 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 
 void MagLib::init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux)
 {
-	Serial.begin(9600);
-	Wire.begin();
-
 	changeI2CBus(0);
 
 	// Init first 16 nodes as normal
@@ -318,6 +303,54 @@ void MagLib::read32Nodes(char *buffer, char zyxt)
 
 	_device4.ReadMeasurement(receiveBuffer, zyxt);
 	for (int i = 2; i < 9; i++) buffer[i + 184] = receiveBuffer[i + 1];
+}
+
+int MagLib::testI2CLines(uint32_t addressPackage)
+{
+	_address1 = addressPackage & 0xFF;
+	_address2 = (addressPackage & 0xFF00) >> 8;
+	_address3 = (addressPackage & 0xFF0000) >> 16;
+	_address4 = (addressPackage & 0xFF000000) >> 24;
+
+	int error = 1;
+
+	changeI2CBus(0);
+
+	Wire.beginTransmission(_address1);
+	Wire.write(0x80);
+	Wire.write(0xF0);
+	Wire.endTransmission();
+	Wire.requestFrom(_address1, 1);
+	if (Wire.available() != 1) error |= (0b0001);
+	
+	changeI2CBus(1);
+
+	Wire.beginTransmission(_address2);
+	Wire.write(0x80);
+	Wire.write(0xF0);
+	Wire.endTransmission();
+	Wire.requestFrom(_address2, 1);
+	if (Wire.available() != 1) error |= (0b0010);
+
+	changeI2CBus(2);
+
+	Wire.beginTransmission(_address3);
+	Wire.write(0x80);
+	Wire.write(0xF0);
+	Wire.endTransmission();
+	Wire.requestFrom(_address3, 1);
+	if (Wire.available() != 1) error |= (0b0100);
+
+	changeI2CBus(4);
+
+	Wire.beginTransmission(_address4);
+	Wire.write(0x80);
+	Wire.write(0xF0);
+	Wire.endTransmission();
+	Wire.requestFrom(_address4, 1);
+	if (Wire.available() != 1) error |= (0b1000);
+
+	return error;
 }
 
 void MagLib::printRawData(char *buffer, int format, int size)
