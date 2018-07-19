@@ -12,6 +12,8 @@
 
 MagLib device; 
 
+float Bx_new, Bx_old;
+
 char buffer[NODE_SINGLE];
 
 void setup() {
@@ -24,7 +26,21 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly
   device.readSingleNode(buffer, 0xF);
-  device.printRawData(buffer, HEX, NODE_SINGLE);
+  //device.printRawData(buffer, HEX, NODE_SINGLE);
 
-  delay(25);
+  Bx_new = (buffer[2] * 256 + buffer[3]) * 0.00805;
+  float By = (buffer[4] * 256 + buffer[5]) * 0.00805;
+  float Bz = (buffer[6] * 256 + buffer[7]) * 0.002936;
+
+  if (Bx_new > 150) Bx_new = Bx_old;
+
+  Serial.print(Bx_new);
+  Serial.print("\t");
+  Serial.print(By);
+  Serial.print("\t");
+  Serial.println(Bz);
+
+  Bx_old = Bx_new;
+
+  delay(20);
 }

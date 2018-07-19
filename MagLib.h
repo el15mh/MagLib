@@ -22,7 +22,7 @@
 #define SCL2			3
 #define SDA3			56
 #define SCL3			57
-
+  
 /**	@file MagLib.h
 	@brief Class for integration with arrays of MagOne sensors on the Arduino platform.
 	@author Max Houghton

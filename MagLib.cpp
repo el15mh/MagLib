@@ -34,7 +34,13 @@ void MagLib::readSingleNode(char *buffer, char zyxt)
 	buffer[1] = (time & 0xFF);			// T lsb
 
 	_device1.ReadMeasurement(receiveBuffer, zyxt);
-	for (i = 2; i < 8; i++) buffer[i] = receiveBuffer[i + 1];
+	buffer[2] = receiveBuffer[3];
+	buffer[3] = receiveBuffer[4];
+	buffer[4] = receiveBuffer[5];
+	buffer[5] = receiveBuffer[6];
+	buffer[6] = receiveBuffer[7];
+	buffer[7] = receiveBuffer[8];
+
 }
 
 void MagLib::initFourNode(uint32_t addressPackage, char *_receiveBuffer, char zyxt)
@@ -183,9 +189,12 @@ void MagLib::read16Nodes(char *buffer, char zyxt)
 
 void MagLib::init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux)
 {
+	Serial.begin(9600);
+	Wire.begin();
+
 	changeI2CBus(0);
 
-	// Init 16 nodes as normal
+	// Init first 16 nodes as normal
 	init16Nodes(addressPackage, receiveBuffer, zyxt, mux);
 
 	// Change to next I2C Bus
