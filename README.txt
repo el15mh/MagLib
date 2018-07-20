@@ -16,6 +16,11 @@ Version 1.1
 
 	- read 4x4 and 32 array devices
 
+Version 1.2
+
+	- improved examples for Bluetooth and 16/32 Node devices
+	- improved capabilities for comms over I2C ports (use of i2c_t3 library)
+
 
 Tested using Teensy 3.6.
 
