@@ -17,13 +17,9 @@ MagLib device;
 char buffer[NODE_SINGLE];
 
 void setup() {
-
-  Serial.begin(9600);
-  Wire.begin(I2C_MASTER, 0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, 400000);
-  Wire.setDefaultTimeout(200000);
   
   // put your setup code here, to run once: 
-  device.initSingleNode(I2C_Address, buffer, 0xF);
+  device.initSingleNode(I2C_Address, buffer, 0xF, 0);
 
   delay(1000);
 }

@@ -40,6 +40,8 @@ public:
 	*/
 	~MagLib();
 
+	void initCommunication(int i2cLine);
+
 /* ********** SINGLE SENSOR CONTROL ********** */
 
 	/**	Initialise single node sensor
@@ -47,7 +49,7 @@ public:
 	 	@param receiveBuffer Buffer to hold status byte
 	 	@param zytx Selection byte to specify axes to read (0xE -> XYZ)
 	 */
-	void initSingleNode(uint16_t address, char *buffer, char zyxt);
+	void initSingleNode(uint16_t address, char *buffer, char zyxt, int i2cLine);
 
 	/** Read data current measured by the device.
 		@param receiveBuffer Pointer to data packet (9 bytes -> Status + 2*(T+X+Y+Z)).
@@ -62,13 +64,13 @@ public:
 	 	@param receiveBuffer Buffer to hold status byte
 	 	@param zytx Selection byte to specify axes to read (0xE -> XYZ)
 	 */
-	void initFourNode(uint32_t addressPackage, char *receiveBuffer, char zyxt);
+	void initFourNode(uint32_t addressPackage, char *receiveBuffer, char zyxt, int i2cLine);
 
 	/** Read data current measured by the device.
 		@param buffer Pointer to data packet.
 		@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
 	*/
-	void readFourNodes(char *buffer, char zyxt);
+	void readFourNodes(char *buffer, char zyxt, int i2cLine);
 
 /* ********** 16 NODE SENSOR CONTROL ********** */
 
@@ -77,13 +79,13 @@ public:
 		@param receiveBuffer Buffer to hold status byte
 		@param zytx Selection byte to specify axes to read (0xE -> XYZ)
 	*/
-	void init16Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux);
+	void init16Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux, int i2cLine);
 
 	/** Read data current measured by the device.
 		@param buffer Pointer to data packet.
 		@param zyxt Byte to specify which axes are to be read (1110 -> reading Z, Y and X).
 	*/
-	void read16Nodes(char *buffer, char zyxt);
+	void read16Nodes(char *buffer, char zyxt, int i2cLine);
 
 /* ********** 32 NODE SENSOR CONTROL ********** */
 
@@ -101,11 +103,6 @@ public:
 	void read32Nodes(char *buffer, char zyxt);
 	
 /* ********** GLOBAL FUNCTIONS ********** */
-
-	/** Print raw data to serial port.
-		@param addressPackage I2C Addresses for sensors
-	*/
-	int testI2CLines(uint32_t addressPackage);
 
 	/** Print raw data to serial port.
 		@param buffer Packet of data containing info from sensors
@@ -135,12 +132,6 @@ public:
 	 */
 	void closeSDCard();
 
-	/**	Change the I2C bus used.
-		@param pinSDA Specify the pin on the Arduino for I2C SDA line.
-		@param pinSDA Specify the pin on the Arduino for I2C SCL line.
-	*/
-	void changeI2CBus(int bus);
-
 	/** Print time taken to get 1000 readings - 4 Node
 	*/
 	void TimeMeasurement(float TimeTaken);
@@ -156,10 +147,10 @@ private:
 
 	File file;			/** File object used to write data to SD card. */
 
-	MLX90393 _device1;	/** MLX90393 device to take readings */
-	MLX90393 _device2;	/** MLX90393 device to take readings */
-	MLX90393 _device3;	/** MLX90393 device to take readings */
-	MLX90393 _device4;	/** MLX90393 device to take readings */
+	MLX90393 device1;	/** MLX90393 device to take readings - I2C Line 1 Address 1 */
+	MLX90393 device2;	/** MLX90393 device to take readings - I2C Line 1 Address 2 */
+	MLX90393 device3;	/** MLX90393 device to take readings - I2C Line 1 Address 3 */
+	MLX90393 device4;	/** MLX90393 device to take readings - I2C Line 1 Address 4 */
 
 	uint8_t _address1;	/** First I2C address used for communcations */
 	uint8_t _address2;	/** Second I2C address used for communcations */
