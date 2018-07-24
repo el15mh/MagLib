@@ -9,6 +9,7 @@ MagLib::~MagLib()
 {
 
 }
+
 void MagLib::initCommunication(int i2cLine)
 {
 	Serial.begin(9600);
@@ -38,7 +39,6 @@ void MagLib::initCommunication(int i2cLine)
 		break;
 	}
 }
-
 
 void MagLib::initSingleNode(uint16_t address, char *buffer, char zyxt, int i2cLine)
 {
@@ -204,11 +204,10 @@ void MagLib::read16Nodes(char *buffer, char zyxt, int i2cLine)
 void MagLib::init32Nodes(uint32_t addressPackage, char *receiveBuffer, char zyxt, int *mux)
 {
 	initCommunication(0);
+	initCommunication(1);
 
 	// Init first 16 nodes as normal
 	init16Nodes(addressPackage, receiveBuffer, zyxt, mux, 0);
-
-	initCommunication(1);
 
 	// Init remaining 16 nodes
 	init16Nodes(addressPackage, receiveBuffer, zyxt, mux, 1);
@@ -420,16 +419,6 @@ void MagLib::closeSDCard()
 
 void MagLib::setMux(int S1, int S0)
 {
-	/*
-	Serial.print("Changing mux: S0 = ");
-	Serial.print(S0);
-	Serial.print(", S1 = ");
-	Serial.print(S1);
-	Serial.println();
-	*/
-
-	delay(10);
-
 	digitalWrite(_mux[0], S0);
 	digitalWrite(_mux[1], S1);
 }
